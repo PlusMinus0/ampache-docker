@@ -10,7 +10,7 @@ MAINTAINER PlusMinus <piddlpiddl@gmail.com>
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
                         && apt-get update && apt-get install -y --force-yes -q deb-multimedia-keyring \
                         && apt-get update && apt-get install -y -q git ffmpeg \
-                        && docker-php-ext-install pdo_mysql\
+                        && docker-php-ext-install pdo_mysql gettext \
                         && cd /var/www   \
                         && git clone https://github.com/ampache/ampache.git \
                         && mv ampache/* html/ \
