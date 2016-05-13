@@ -9,8 +9,9 @@ MAINTAINER PlusMinus <piddlpiddl@gmail.com>
 # For installing ffmpeg, the deb-multimedia repository is used which might be considered unsafe so use with caution
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
                         && apt-get update && apt-get install -y --force-yes -q deb-multimedia-keyring \
-                        && apt-get update && apt-get install -y -q git ffmpeg \
-                        && docker-php-ext-install pdo_mysql gettext \
+                        && apt-get update && apt-get install -y -q git ffmpeg libgd3 libpng-dev libjpeg-dev libfreetype6-dev \
+                        && docker-php-ext-install pdo_mysql gettext gd \
+                        && a2enmod rewrite \
                         && cd /var/www   \
                         && git clone https://github.com/ampache/ampache.git \
                         && mv ampache/* html/ \
@@ -19,6 +20,9 @@ RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sour
                         && rm -rf /var/lib/apt/lists/* \
                         && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
                         && cd html \
+                        && cp rest/.htaccess.dist rest/.htaccess \
+                        && cp play/.htaccess.dist play/.htaccess \
+                        && cp channel/.htaccess.dist channel/.htaccess \
                         && composer install --prefer-source --no-interaction \
                         && apt-get remove -y git \
                         && apt-get autoremove -y \
@@ -29,4 +33,3 @@ RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sour
 VOLUME ["/var/www/html/config","/var/www/html/themes","/var/data"]
 
 CMD ["apache2-foreground"]
-
